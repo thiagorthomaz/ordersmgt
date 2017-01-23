@@ -1,5 +1,5 @@
 
-var app = angular.module("ordermgt", ['ui.router', 'ui.bootstrap']);
+var app = angular.module("ordermgt", ['ngResource', 'ui.router', 'ui.bootstrap']);
 
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -35,6 +35,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   var customersState = {
     name: 'default.customers',
     url: '/customers',
+    controller: 'CustomersCtrl',
     templateUrl: 'partials/customers.html'
   };
   

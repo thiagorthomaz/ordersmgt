@@ -59,6 +59,11 @@ class Customers extends \app\controller\Controller {
 
   public function post() {
     
+    $params = $this->getRequest()->getAllParams();
+    print_r($params);
+    
+    exit;
+    
   }
 
   public function update() {

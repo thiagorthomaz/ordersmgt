@@ -17,7 +17,6 @@ class View extends \stphp\http\HttpResponse {
   }
   
   public function notFound(){
-    new \app\controller\Customers();
     echo "Not found";
     exit;
   }
