@@ -11,6 +11,11 @@ namespace app\controller;
  */
 abstract class Controller extends \stphp\Controller {
   
+  function __construct() {
+    parent::__construct();
+    $this->response = new \app\view\View();
+  }
+  
   protected function addResponseContent(\stphp\ArraySerializable $content, $append_to = null) {
     $this->response->addContent($content, $append_to);    
   }

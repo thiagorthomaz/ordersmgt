@@ -45,8 +45,7 @@ class Customers extends \app\controller\Controller {
     $this->addResponseContent($customer3, true);
     
     return $this->getResponse();
-    
-    exit;
+  
   }
 
   public function delete() {

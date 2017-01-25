@@ -42,6 +42,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   var productsState = {
     name: 'default.products',
     url: '/products',
+    controller: 'ProductsCtrl',
     templateUrl: 'partials/products.html'
   };
 

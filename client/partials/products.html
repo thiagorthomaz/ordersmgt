@@ -1,1 +1,22 @@
 <h2>Products</h2>
+
+<table class="table table-striped"> 
+  <thead> 
+    <tr> 
+      <th>Product</th> 
+      <th>Description</th> 
+      <th>Price</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+
+    <tr ng-repeat="p in products">
+      <td>{{p.name}}</td> 
+      <td>{{p.description}}</td> 
+      <td>{{p.unitPrice | currency:NUMBER_FORMATS.CURRENCY_SYM  }}</td>
+    </tr>
+    
+  </tbody>
+</table>
+
+<button class="btn btn-primary" type="button" ng-click="newProduct();">New product</button>
