@@ -21,5 +21,5 @@ class CustomerDAO extends \app\model\DAO {
   public function modeltoArray(\stphp\Database\iDataModel $data_model) {
     
   }
-
-}
+  
+}  

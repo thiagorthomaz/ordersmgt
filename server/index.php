@@ -27,6 +27,9 @@ stphp\config\AutoLoad::addNamespace("app\\exception", $app_path . "/server/excep
 stphp\config\AutoLoad::addNamespace("app\\model", $app_path . "/server/model");
 
 
+stphp\config\AutoLoad::addNamespace("app\\config", $app_path . "/config");
+
+
 stphp\STPHP::registerExtensions();
 stphp\STPHP::registerAutoload();
 $session = new stphp\Session();
