@@ -29,10 +29,20 @@ app.controller("ModalNewProductCtrl", function($scope, ProductsAPI, $uibModalIns
   
   
   $scope.save = function(product){ 
-        
-    ProductsAPI.post(product, function(result){
+    
+    
+    if (!product || !product.name){ $scope.name_empty = true; } else { $scope.name_empty = false; }
+    if (!product || !product.price){ $scope.price_empty = true; } else { $scope.price_empty = false; }
+    if (!product || !product.description){ $scope.description_empty = true; } else { $scope.description_empty = false; }
+
+    if (!$scope.name_empty && !$scope.price_empty && !$scope.description_empty) {
+      ProductsAPI.post(product, function(result){
       
-    });
+      });
+    }
+    
+    
+    
     
   };
   
