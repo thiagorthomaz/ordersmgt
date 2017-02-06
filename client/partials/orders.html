@@ -1,1 +1,24 @@
 <h2>Orders</h2>
+
+<table class="table table-striped"> 
+  <thead> 
+    <tr> 
+      <th>Customer</th> 
+      <th>Product</th> 
+      <th>Qtde</th> 
+      <th>Price (R$)</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+
+    <tr ng-repeat="o in orders">
+      <td>{{o.Customer.name}}</td> 
+      <td>{{o.Product.name}}</td> 
+      <td>{{o.qtde}}</td> 
+      <td>{{o.price}}</td>
+    </tr>
+    
+  </tbody>
+</table>
+
+<button class="btn btn-primary" type="button" ng-click="newOrder();">New order</button>

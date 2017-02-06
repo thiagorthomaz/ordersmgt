@@ -13,7 +13,8 @@ app.controller("ProductsCtrl", function($scope, ProductsAPI, $uibModal){
   $scope.newProduct = function(){
     var modalInstance = $uibModal.open({
       templateUrl: 'partials/modals/new_product.html',
-      controller: 'ModalNewProductCtrl'
+      controller: 'ModalNewProductCtrl',
+      scope : $scope
     });
   };
   
@@ -32,12 +33,15 @@ app.controller("ModalNewProductCtrl", function($scope, ProductsAPI, $uibModalIns
     
     
     if (!product || !product.name){ $scope.name_empty = true; } else { $scope.name_empty = false; }
-    if (!product || !product.price){ $scope.price_empty = true; } else { $scope.price_empty = false; }
+    if (!product || !product.unitPrice){ $scope.unitPrice_empty = true; } else { $scope.unitPrice_empty = false; }
     if (!product || !product.description){ $scope.description_empty = true; } else { $scope.description_empty = false; }
 
-    if (!$scope.name_empty && !$scope.price_empty && !$scope.description_empty) {
+    if (!$scope.name_empty && !$scope.unitPrice_empty && !$scope.description_empty) {
       ProductsAPI.post(product, function(result){
-      
+        if (result.content && result.content.Product) {
+          $scope.$parent.products.push(result.content.Product);
+          $uibModalInstance.close();
+        }
       });
     }
     

@@ -28,6 +28,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   var ordersState = {
     name: 'default.orders',
     url: '/orders',
+    controller: 'OrdersCtrl',
     templateUrl: 'partials/orders.html'
   };
   

@@ -15,19 +15,17 @@ app.controller("CustomersCtrl", function($scope, CustomersAPI, $uibModal){
   $scope.newCustomer = function(){
     var modalInstance = $uibModal.open({
       templateUrl: 'partials/modals/new_customer.html',
-      controller: 'ModalNewCustomerCtrl'
+      controller: 'ModalNewCustomerCtrl',
+      scope : $scope
     });
   };
-  
-  
-
   
 });
 
 
 app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalInstance){
   
-  $scope.close = function(){ $uibModalInstance .close(); }
+  $scope.close = function(){ $uibModalInstance.close(); }
   
   
   $scope.save = function(customer){ 
@@ -38,7 +36,10 @@ app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalI
 
     if (!$scope.name_empty && !$scope.email_empty && !$scope.phone_empty) {
       CustomersAPI.post(customer, function(result){
-
+         if (result.content && result.content.Customer) {
+           $scope.$parent.customers.push(result.content.Customer);
+            $uibModalInstance.close();
+         }
       });
     }
     

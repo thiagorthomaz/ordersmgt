@@ -1,0 +1,65 @@
+<div class="modal-content">
+  <form name="form_product">    
+    <div class="modal-header">   
+
+      <h3 class="modal-title">
+        New order
+      </h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+
+        <div class="form-group col-xs-12">   
+
+          <div class="form-group">
+            <label for="customer">Customer</label>
+            
+            <select class="form-control" id="customer" ng-options="c.name for c in customer_list" ng-model="customer">
+              <option value="">Select one</option>              
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="product">Product</label>
+            
+            <select class="form-control" id="product" ng-options="c.name for c in product_list" ng-model="product">
+
+              <option value="">Select one</option>              
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="qtde">Quantitie</label>
+            <input type="number" class="form-control">
+          </div>
+
+          
+          <div class="form-group">
+            <label for="required_date">Required date</label>
+            <input type="date" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="Shipped_date">Shipped date</label>
+            <input type="date" class="form-control">
+          </div>
+          
+
+        </div>
+
+      </div>
+
+    </div>     
+    <div class="modal-footer">      
+      <button class="btn btn-primary btn-sm" type="button" ng-click="save(Product)">Save</button>
+      <button class="btn btn-default btn-sm" type="button" ng-click="close()">Close</button>      
+    </div>
+
+
+  </form>  
+
+
+</div>
+
+
