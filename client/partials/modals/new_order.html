@@ -15,7 +15,7 @@
           <div class="form-group">
             <label for="customer">Customer</label>
             
-            <select class="form-control" id="customer" ng-options="c.name for c in customer_list" ng-model="customer">
+            <select class="form-control" id="customer" ng-options="c.name for c in customer_list" ng-model="Order.customer">
               <option value="">Select one</option>              
             </select>
           </div>
@@ -23,26 +23,31 @@
           <div class="form-group">
             <label for="product">Product</label>
             
-            <select class="form-control" id="product" ng-options="c.name for c in product_list" ng-model="product">
+            <select class="form-control" id="product" ng-options="c.name for c in product_list" ng-model="Order.product">
 
               <option value="">Select one</option>              
             </select>
           </div>
           
           <div class="form-group">
-            <label for="qtde">Quantitie</label>
-            <input type="number" class="form-control">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" ng-model="Order.quantity" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="discount">Discount</label>
+            <input type="number" id="discount" ng-model="Order.discount" class="form-control">
           </div>
 
           
           <div class="form-group">
             <label for="required_date">Required date</label>
-            <input type="date" class="form-control">
+            <input type="date" id="required_date" ng-model="Order.required_date" class="form-control">
           </div>
           
           <div class="form-group">
             <label for="Shipped_date">Shipped date</label>
-            <input type="date" class="form-control">
+            <input type="date" id="Shipped_date" ng-model="Order.shipped_date" class="form-control">
           </div>
           
 
@@ -52,7 +57,7 @@
 
     </div>     
     <div class="modal-footer">      
-      <button class="btn btn-primary btn-sm" type="button" ng-click="save(Product)">Save</button>
+      <button class="btn btn-primary btn-sm" type="button" ng-click="save(Order)">Save</button>
       <button class="btn btn-default btn-sm" type="button" ng-click="close()">Close</button>      
     </div>
 

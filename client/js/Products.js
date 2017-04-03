@@ -17,10 +17,7 @@ app.controller("ProductsCtrl", function($scope, ProductsAPI, $uibModal){
       scope : $scope
     });
   };
-  
-  
 
-  
 });
 
 
@@ -33,7 +30,7 @@ app.controller("ModalNewProductCtrl", function($scope, ProductsAPI, $uibModalIns
     
     
     if (!product || !product.name){ $scope.name_empty = true; } else { $scope.name_empty = false; }
-    if (!product || !product.unitPrice){ $scope.unitPrice_empty = true; } else { $scope.unitPrice_empty = false; }
+    if (!product || !product.unit_price){ $scope.unit_price = true; } else { $scope.unit_price = false; }
     if (!product || !product.description){ $scope.description_empty = true; } else { $scope.description_empty = false; }
 
     if (!$scope.name_empty && !$scope.unitPrice_empty && !$scope.description_empty) {

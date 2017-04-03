@@ -57,14 +57,10 @@ class Customer implements \stphp\Database\iDataModel, \stphp\ArraySerializable  
   }
 
 
-  public function arraySerialize() {
+public function arraySerialize() {
     $vars = get_object_vars($this);
-    foreach ($vars as &$v){
-      $v = utf8_encode($v);
-    }
     return $vars;
   }
-
   public function getDescription($field) {
     
   }

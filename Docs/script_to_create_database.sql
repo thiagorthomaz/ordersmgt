@@ -6,8 +6,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Table `ordersmgt`.`tab_customers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ordersmgt`.`tab_customers` ;
-
 CREATE TABLE IF NOT EXISTS `ordersmgt`.`tab_customers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -21,13 +19,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ordersmgt`.`tab_products`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ordersmgt`.`tab_products` ;
-
 CREATE TABLE IF NOT EXISTS `ordersmgt`.`tab_products` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `description` VARCHAR(45) NOT NULL,
-  `unitPrice` DECIMAL(15,2) NOT NULL,
+  `unit_price` DECIMAL(15,2) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -35,14 +31,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ordersmgt`.`tab_order_details`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ordersmgt`.`tab_order_details` ;
-
 CREATE TABLE IF NOT EXISTS `ordersmgt`.`tab_order_details` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_product` INT NOT NULL,
   `discount` DECIMAL(15,2) NOT NULL,
   `quantity` INT NOT NULL,
-  `unitPrice` DECIMAL(15,2) NOT NULL,
+  `unit_price` DECIMAL(15,2) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_tab_orders_tab_products_idx` (`id_product` ASC),
   CONSTRAINT `fk_tab_orders_tab_products`
@@ -56,20 +50,18 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ordersmgt`.`tab_orders`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ordersmgt`.`tab_orders` ;
-
 CREATE TABLE IF NOT EXISTS `ordersmgt`.`tab_orders` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `id_customers` INT NOT NULL,
+  `id_customer` INT NOT NULL,
   `id_order_details` INT NOT NULL,
-  `orderDate` DATETIME NOT NULL,
-  `requiredDate` DATETIME NULL,
-  `shippedDate` DATETIME NULL,
+  `order_date` DATETIME NOT NULL,
+  `required_date` DATETIME NULL,
+  `shipped_date` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_tab_orders_tab_customers1_idx` (`id_customers` ASC),
+  INDEX `fk_tab_orders_tab_customers1_idx` (`id_customer` ASC),
   INDEX `fk_tab_orders_tab_order_details1_idx` (`id_order_details` ASC),
   CONSTRAINT `fk_tab_orders_tab_customers1`
-    FOREIGN KEY (`id_customers`)
+    FOREIGN KEY (`id_customer`)
     REFERENCES `ordersmgt`.`tab_customers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -84,8 +76,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `ordersmgt`.`tab_product_details`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ordersmgt`.`tab_product_details` ;
-
 CREATE TABLE IF NOT EXISTS `ordersmgt`.`tab_product_details` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_products` INT NOT NULL,

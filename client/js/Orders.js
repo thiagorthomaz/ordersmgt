@@ -2,11 +2,13 @@ app.controller("OrdersCtrl", function($scope, OrdersAPI, $uibModal){
 
   OrdersAPI.all({}, function(result){
     
-    if (result.content && result.content.Product){
-      $scope.products = result.content.Product;
+    if (result.content && result.content.Purchase){
+      $scope.purchases = result.content.Purchase;
     } else {
-      $scope.products = [];
+      $scope.purchases = [];
     }
+    
+    console.log($scope.purchases);
     
   });
   
@@ -25,6 +27,9 @@ app.controller("ModalNewOrderCtrl", function($scope, ProductsAPI, CustomersAPI, 
   
   $scope.close = function(){ $uibModalInstance .close(); }
   
+  $scope.Order = {};
+  $scope.Order.required_date = new Date();
+  $scope.Order.shipped_date = new Date();
   
   CustomersAPI.all(function(result){
     var customers = result.content.Customer;
@@ -38,7 +43,10 @@ app.controller("ModalNewOrderCtrl", function($scope, ProductsAPI, CustomersAPI, 
   
   
   $scope.save = function(order){ 
-    console.log("Save");    
+    
+    OrdersAPI.post(order, function(result) {
+      console.log(result);
+    });
     
   };  
   

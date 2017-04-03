@@ -13,7 +13,7 @@ class Product implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
   private $id;
   private $name;
   private $description;
-  private $unitPrice;
+  private $unit_price;
 
   function getId() {
     return $this->id;
@@ -27,8 +27,8 @@ class Product implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
     return $this->description;
   }
 
-  function getUnitPrice() {
-    return $this->unitPrice;
+  function getUnit_price() {
+    return $this->unit_price;
   }
 
   function setId($id) {
@@ -43,15 +43,12 @@ class Product implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
     $this->description = $description;
   }
 
-  function setUnitPrice($unitPrice) {
-    $this->unitPrice = $unitPrice;
+  function setUnit_price($unitPrice) {
+    $this->unit_price = $unitPrice;
   }
 
   public function arraySerialize() {
     $vars = get_object_vars($this);
-    foreach ($vars as &$v){
-      $v = utf8_encode($v);
-    }
     return $vars;
   }
 
