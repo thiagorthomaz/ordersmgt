@@ -1,5 +1,5 @@
 
-var app = angular.module("ordermgt", ['ngResource', 'ui.router', 'ui.bootstrap']);
+var app = angular.module("ordermgt", ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils.masks']);
 
 
 app.config(function($stateProvider, $urlRouterProvider) {

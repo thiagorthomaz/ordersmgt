@@ -11,6 +11,8 @@ namespace app\controller;
  */
 abstract class Controller extends \stphp\Controller {
   
+  protected $string_msg_error = "";
+      
   function __construct() {
     parent::__construct();
     $this->response = new \app\view\View();
@@ -18,6 +20,19 @@ abstract class Controller extends \stphp\Controller {
   
   protected function addResponseContent(\stphp\ArraySerializable $content, $append_to = null) {
     $this->response->addContent($content, $append_to);    
+  }
+  
+  protected function responseError($string = ""){
+    
+    $message = new \app\view\ErrorView();
+    if (empty($string)) {
+      $message->setMessange($this->string_msg_error);
+    } else {
+      $message->setMessange($string);
+    }
+    
+    return $message;
+
   }
   
   

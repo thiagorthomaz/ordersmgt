@@ -15,8 +15,7 @@ class Orders  extends \app\controller\Controller {
     $tab_order = new \app\model\Order();
     $tab_order_dao = new \app\model\OrderDAO();
     $tab_order_detail = new \app\model\OrderDetail();
-    $tab_order_detail_dao = new \app\model\OrderDetailDAO();
-    
+
     $params = $this->request->getAllParams();
     
     $customer = $params['customer'];
@@ -31,27 +30,15 @@ class Orders  extends \app\controller\Controller {
     $tab_order_detail->setUnit_price($product['unit_price']);
     $tab_order_detail->setDiscount($discount);
     
-    
-    
     $tab_order->setId_customer($customer['id']);
     $tab_order->setOrder_date(date("Y-m-d H:i:s"));
     $tab_order->setRequired_date($required_date);
     $tab_order->setShipped_date($shipped_date);
-    print_r($tab_order);
+    
     $tab_order_dao->beginTransaction();
-
-    if (!$tab_order_detail_dao->insert($tab_order_detail)) {
-      
-      $tab_order_dao->rollBack();
-      $rs = $tab_order_detail_dao->getResultset();
-      
-      
-      $rs_msg = $rs->getError_message();
-      
-      $message = new \app\view\ErrorView();
-      $message->setMessange($rs_msg);
-      return $message;
-
+    
+    if (!$this->saveOrderDetail($tab_order_detail)) {
+      return $this->responseError();
     }
     
     $id_order_details = $tab_order_detail->getId();
@@ -60,36 +47,42 @@ class Orders  extends \app\controller\Controller {
     if ($tab_order_dao->insert($tab_order)) {
 
       $tab_order_dao->commit();
-      
-      echo "ok";
+      $success = new \app\view\SuccessView();
+      $success->setMessange("Order saved!");
+      return $success;
       
     } else {
-      
+
       $tab_order_dao->rollBack();
       $rs = $tab_order_dao->getResultset();
+
+      $this->string_msg_error = $rs->getError_message();
+      return $this->responseError();
       
+    }
+
+  }
+  
+  private function saveOrderDetail(\app\model\OrderDetail $tab_order_detail){
+    $tab_order_detail_dao = new \app\model\OrderDetailDAO();
+
+    if (!$tab_order_detail_dao->insert($tab_order_detail)) {
       
-      $rs_msg = $rs->getError_message();
+      $tab_order_detail_dao->rollBack();
+      $rs = $tab_order_detail_dao->getResultset();
+
+      $this->string_msg_error = $rs->getError_message();
       
-      $message = new \app\view\ErrorView();
-      $message->setMessange($rs_msg);
-      return $message;
+      return false;
       
     }
     
+    return true;
     
-    
-    print_r($tab_order_detail);
-    //print_r($params);
-    
-    exit;
   }
   
-  
   public function all() {
-    
-    
-    
+
     $dao = new \app\model\OrderDAO();
     $orders = $dao->selectAll(100, $dao->getModel());
     
@@ -98,9 +91,6 @@ class Orders  extends \app\controller\Controller {
       $this->addResponseContent($purchase, true);
     }
 
-    
-    
-    
     return $this->getResponse();
     
   }

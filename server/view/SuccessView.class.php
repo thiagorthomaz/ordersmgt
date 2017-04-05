@@ -3,11 +3,11 @@
 namespace app\view;
 
 /**
- * Description of ErrorView
+ * Description of SuccessView
  *
  * @author thiago
  */
-class ErrorView  extends \stphp\http\HttpResponse {
+class SuccessView extends \stphp\http\HttpResponse {
   
   private $message;
   
@@ -24,7 +24,7 @@ class ErrorView  extends \stphp\http\HttpResponse {
   }
   
   public function serialize() {
-    return json_encode(array("message" => $this->message, "content" => $this->content, "type" => "error"));
+    return json_encode(array("message" => $this->message, "content" => $this->content, "type" => "success"));
   }
   
 }

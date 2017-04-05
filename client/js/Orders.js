@@ -1,16 +1,19 @@
 app.controller("OrdersCtrl", function($scope, OrdersAPI, $uibModal){
 
-  OrdersAPI.all({}, function(result){
-    
-    if (result.content && result.content.Purchase){
-      $scope.purchases = result.content.Purchase;
-    } else {
-      $scope.purchases = [];
-    }
-    
-    console.log($scope.purchases);
-    
-  });
+  
+  
+  
+  $scope.atualizarLista = function() {
+    OrdersAPI.all({}, function(result){
+
+      if (result.content && result.content.Purchase){
+        $scope.purchases = result.content.Purchase;
+      } else {
+        $scope.purchases = [];
+      }
+
+    });  
+  }
   
   $scope.newOrder = function(){
     var modalInstance = $uibModal.open({
@@ -19,6 +22,9 @@ app.controller("OrdersCtrl", function($scope, OrdersAPI, $uibModal){
       scope : $scope
     });
   };
+  
+  
+  $scope.atualizarLista();
   
 });
 
@@ -45,7 +51,11 @@ app.controller("ModalNewOrderCtrl", function($scope, ProductsAPI, CustomersAPI, 
   $scope.save = function(order){ 
     
     OrdersAPI.post(order, function(result) {
-      console.log(result);
+      if (result.type == "success") {
+        
+        $scope.$parent.atualizarLista();
+      }
+      
     });
     
   };  
