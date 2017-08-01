@@ -9,11 +9,11 @@ app.controller("ProductsCtrl", function($scope, ProductsAPI, $uibModal){
     }
     
   });
-  
-  $scope.addProduct = function(){
+  console.log(123);
+  $scope.newProduct = function(){
     var modalInstance = $uibModal.open({
-      templateUrl: 'partials/modals/product.html',
-      controller: 'ModalProductCtrl',
+      templateUrl: 'partials/modals/new_product.html',
+      controller: 'ModalNewProductCtrl',
       scope : $scope
     });
   };
