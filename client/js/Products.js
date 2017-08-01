@@ -10,10 +10,10 @@ app.controller("ProductsCtrl", function($scope, ProductsAPI, $uibModal){
     
   });
   
-  $scope.newProduct = function(){
+  $scope.addProduct = function(){
     var modalInstance = $uibModal.open({
-      templateUrl: 'partials/modals/new_product.html',
-      controller: 'ModalNewProductCtrl',
+      templateUrl: 'partials/modals/product.html',
+      controller: 'ModalProductCtrl',
       scope : $scope
     });
   };
@@ -42,12 +42,8 @@ app.controller("ModalNewProductCtrl", function($scope, ProductsAPI, $uibModalIns
       });
     }
     
-    
-    
-    
   };
-  
-  
+
   
 });
 

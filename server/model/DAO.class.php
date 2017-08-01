@@ -15,7 +15,7 @@ abstract class DAO extends \stphp\Database\MySQL {
     
     $pdo_config = new \app\config\PDOConfig();
     $pdo_config->setUser("root");
-    $pdo_config->setpassword("");
+    $pdo_config->setpassword("masterkey");
     
     
     $this->connect($pdo_config);

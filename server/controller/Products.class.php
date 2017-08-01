@@ -13,8 +13,7 @@ class Products extends \app\controller\Controller {
   
     public function all(){
     
-      $dao = new \app\model\ProductsDAO();
-      $products = $dao->selectAll(100, $dao->getModel());
+      $products = $this->loadAllProducts();
       
       foreach ($products as $p){
         $this->addResponseContent($p, true);
@@ -47,9 +46,15 @@ class Products extends \app\controller\Controller {
       $message->setMessange("We do have some problems to insert: " . $product->getName() . ", please try again.");
       return $message;
     }
+
+  }
+  
+  
+  public function loadAllProducts(){
     
-    
-    
+    $dao = new \app\model\ProductsDAO();
+    return $dao->selectAll(100, $dao->getModel());
+      
   }
   
   

@@ -11,10 +11,10 @@ class Order implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
   
   private $id;
   private $id_customer;
-  private $id_order_details;
   private $order_date;
   private $required_date;
   private $shipped_date;
+  private $paid;
   
   
   function getId() {
@@ -23,10 +23,6 @@ class Order implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
 
   function getId_customer() {
     return $this->id_customer;
-  }
-
-  function getId_order_details() {
-    return $this->id_order_details;
   }
 
   function getOrder_date() {
@@ -41,16 +37,20 @@ class Order implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
     return $this->shipped_date;
   }
 
+  function getPaid() {
+    return $this->paid;
+  }
+
+  function setPaid($paid) {
+    $this->paid = $paid;
+  }
+  
   function setId($id) {
     $this->id = $id;
   }
 
   function setId_customer($id_customer) {
     $this->id_customer = $id_customer;
-  }
-
-  function setId_order_details($id_order_details) {
-    $this->id_order_details = $id_order_details;
   }
 
   function setOrder_date($order_date) {
@@ -66,7 +66,7 @@ class Order implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
   }
 
     
-public function arraySerialize() {
+  public function arraySerialize() {
     $vars = get_object_vars($this);
     return $vars;
   }

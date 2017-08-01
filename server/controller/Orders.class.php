@@ -2,98 +2,170 @@
 
 namespace app\controller;
 
-
 /**
  * Description of Orders
  *
  * @author thiago
  */
-class Orders  extends \app\controller\Controller {
- 
+class Orders extends \app\controller\Controller {
+
+  private function formatDate($date, $format = "d-m-Y H:i:s") {
+    return date($format, strtotime($date));
+  }
+
   public function post() {
     
-    $tab_order = new \app\model\Order();
-    $tab_order_dao = new \app\model\OrderDAO();
-    $tab_order_detail = new \app\model\OrderDetail();
-
-    $params = $this->request->getAllParams();
-    
-    $customer = $params['customer'];
-    $product = $params['product'];
-    $quantity = $params['quantity'];
-    $required_date = $params['required_date'];
-    $shipped_date = $params['shipped_date'];
-    $discount = $params['discount'];
-    
-    $tab_order_detail->setId_product($product['id']);
-    $tab_order_detail->setQuantity($quantity);
-    $tab_order_detail->setUnit_price($product['unit_price']);
-    $tab_order_detail->setDiscount($discount);
-    
-    $tab_order->setId_customer($customer['id']);
-    $tab_order->setOrder_date(date("Y-m-d H:i:s"));
-    $tab_order->setRequired_date($required_date);
-    $tab_order->setShipped_date($shipped_date);
-    
-    $tab_order_dao->beginTransaction();
-    
-    if (!$this->saveOrderDetail($tab_order_detail)) {
-      return $this->responseError();
-    }
-    
-    $id_order_details = $tab_order_detail->getId();
-    $tab_order->setId_order_details($id_order_details);
-    
-    if ($tab_order_dao->insert($tab_order)) {
-
-      $tab_order_dao->commit();
-      $success = new \app\view\SuccessView();
-      $success->setMessange("Order saved!");
-      return $success;
-      
-    } else {
-
-      $tab_order_dao->rollBack();
-      $rs = $tab_order_dao->getResultset();
-
-      $this->string_msg_error = $rs->getError_message();
-      return $this->responseError();
-      
-    }
-
   }
-  
-  private function saveOrderDetail(\app\model\OrderDetail $tab_order_detail){
-    $tab_order_detail_dao = new \app\model\OrderDetailDAO();
 
-    if (!$tab_order_detail_dao->insert($tab_order_detail)) {
-      
-      $tab_order_detail_dao->rollBack();
-      $rs = $tab_order_detail_dao->getResultset();
-
-      $this->string_msg_error = $rs->getError_message();
-      
-      return false;
-      
-    }
-    
-    return true;
-    
-  }
-  
   public function all() {
 
     $dao = new \app\model\OrderDAO();
     $orders = $dao->selectAll(100, $dao->getModel());
-    
-    foreach ($orders as $o){
+
+    foreach ($orders as $o) {
       $purchase = new \app\model\Purchase($o);
       $this->addResponseContent($purchase, true);
     }
 
     return $this->getResponse();
+  }
+
+  public function get() {
+
+    $order_id = $this->request->getParams("order_id");
+    $data_model = new \app\model\Order();
+    $data_model->setId($order_id);
+
+    $purchase = new \app\model\Purchase($data_model);
+
+    $this->addResponseContent($purchase);
+
+    return $this->getResponse();
+  }
+
+  
+  public function saveOrder(){
+    
+    $customer = $this->request->getParams("customer");
+    $paid = $this->request->getParams("paid");
+    $required_date = $this->request->getParams("required_date");
+    $shipped_date = $this->request->getParams("shipped_date");
+    
+    
+    $order_dao = new \app\model\OrderDAO();
+    $order = new \app\model\Order();
+    
+    
+    $order->setId_customer($customer['id']);
+    $order->setRequired_date($this->formatDate($required_date, "Y-m-d H:i:s"));
+    $order->setShipped_date($this->formatDate($shipped_date, "Y-m-d H:i:s"));
+    $order->setPaid($paid);
+    $order->setOrder_date(date("Y-m-d H:i:s"));
+
+    
+    if ($order_dao->insert($order)) {
+      $this->addResponseContent($order);
+      return $this->getResponse();
+    } else {
+      $rs = $order_dao->getResultset();
+      $error_msg = $rs->getError_message();
+      
+      $error = new \app\view\ErrorView();
+      $error->setMessange("Failed to save the order! " . $error_msg);
+      return $error;
+    }
     
   }
   
+  
+  public function saveProduct(){
+    
+    $order_detail = new \app\model\OrderDetail();
+    $order_detail_dao = new \app\model\OrderDetailDAO();
+    $param_order_detail = $this->request->getParams("OrderDetail");
+    
+    if (isset($param_order_detail['id'])) {
+      $id = $param_order_detail['id'];  
+    } else {
+      $id= null;
+    }
+    
+    $discount = $param_order_detail['discount'];
+    $quantity = $param_order_detail['quantity'];
+    $product_id = $param_order_detail['product_id'];
+    $order_id = $param_order_detail['order_id'];
+    $unit_price = $param_order_detail['unit_price'];
+    
+    
+    $order_detail->setDiscount($discount);
+    $order_detail->setQuantity($quantity);
+    $order_detail->setId_product($product_id);
+    $order_detail->setId_orders($order_id);
+    $order_detail->setUnit_price($unit_price);
+    
+    if (!is_null($id)) {
+      $criteria = array('id' => $id);
+      $order_detail->setId($id);
+      $saved = $order_detail_dao->update($order_detail, $criteria);
+    } else {
+      $saved = $order_detail_dao->insert($order_detail);
+    }
+    
+    if (!$saved) {
+      $rs = $order_detail_dao->getResultset();
+      $msg = $rs->getError_message();
+      $error = new \app\view\ErrorView();
+      $error->setMessange("Failed " . $error);
+    } else {
+      $success = new \app\view\SuccessView();
+      $success->setMessange("Product inserted.");
+      return $success;
+    }
+
+  }
+  
+  public function deleteDetail() {
+    
+    $detail_id = $this->request->getParams("detail_id");
+    $detail_dao = new \app\model\OrderDetailDAO();
+    $order = $detail_dao->getModel();
+    $order->setId($detail_id);
+    $found = $detail_dao->select($order);
+    
+    $deleted = false;
+    
+    if (isset($found[0])) {
+      $order = $found[0];
+      $deleted = $detail_dao->delete($order);
+    }
+    
+    if (!$deleted) {
+      $rs = $order_detail_dao->getResultset();
+      $msg = $rs->getError_message();
+      $error = new \app\view\ErrorView();
+      $error->setMessange("Failed " . $error);
+    } else {
+      $success = new \app\view\SuccessView();
+      $success->setMessange("Product deleted.");
+      return $success;
+    }
+    
+    
+  }
+  
+  public function productsFromOrder(){
+    
+    $id_order = $this->request->getParams("order_id");
+    
+    $product_dao = new \app\model\ProductsDAO();
+    $products = $product_dao->findByOrderId($id_order);
+    
+    foreach ($products as $p) {
+      $this->addResponseContent($p, true);
+    }
+
+    return $this->getResponse();
+
+  }
   
 }

@@ -11,6 +11,7 @@ class OrderDetail implements \stphp\Database\iDataModel, \stphp\ArraySerializabl
   
   private $id;
   private $id_product;
+  private $id_orders;
   private $discount;
   private $quantity;
   private $unit_price;
@@ -36,6 +37,14 @@ class OrderDetail implements \stphp\Database\iDataModel, \stphp\ArraySerializabl
     return $this->unit_price;
   }
 
+  function getId_orders() {
+    return $this->id_orders;
+  }
+
+  function setId_orders($id_orders) {
+    $this->id_orders = $id_orders;
+  }
+
   function setId($id) {
     $this->id = $id;
   }
@@ -56,7 +65,7 @@ class OrderDetail implements \stphp\Database\iDataModel, \stphp\ArraySerializabl
     $this->unit_price = $unitPrice;
   }
   
-public function arraySerialize() {
+  public function arraySerialize() {
     $vars = get_object_vars($this);
     return $vars;
   }

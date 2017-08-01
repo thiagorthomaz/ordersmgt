@@ -1,0 +1,60 @@
+<div class="modal-content">
+  <form name="form_product">    
+    <div class="modal-header">   
+
+      <h3 ng-if="!order_id" class="modal-title">
+        New order
+      </h3>
+      <h3 ng-if="order_id" class="modal-title">
+        Order #{{order_id}}
+      </h3>
+      <p if="warning" class="bg-warning">
+        {{warning}}
+      </p>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+
+        <div class="form-group col-xs-12">   
+
+          <h3>Add product</h3>
+          
+          <div class="form-group">
+            <label for="product">Product</label>
+
+            <select class="form-control" id="product" ng-options="c.id as (c.name | uppercase) for c in product_list | uppercase " ng-model="Product.product_id">
+              <option value="">SELECT ONE</option>              
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="text" ui-number-mask="0" id="quantity" ng-model="Product.quantity" class="form-control">
+          </div>
+          
+
+          <div class="form-group">
+            <label for="discount">Discount</label>
+            <input type="text" id="discount" ng-model="Product.discount" class="form-control" ui-number-mask>
+          </div>
+
+      
+        </div>
+
+      </div>
+
+    </div>     
+    <div class="modal-footer">      
+      <button class="btn btn-primary btn-sm" type="button" ng-click="save(Product)">Save</button>
+      <button class="btn btn-default btn-sm" type="button" ng-click="close()">Close</button>      
+    </div>
+
+
+  </form>  
+
+
+</div>
+
+
