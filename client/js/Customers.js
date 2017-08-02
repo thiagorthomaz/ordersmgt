@@ -2,31 +2,46 @@
 
 app.controller("CustomersCtrl", function($scope, CustomersAPI, $uibModal){
 
-  CustomersAPI.all({}, function(result){
-    
-    if (result.content && result.content.Customer){
-      $scope.customers = result.content.Customer;
-    } else {
-      $scope.customers = [];
-    }
-    
-  });
+  function update(){
+    CustomersAPI.all({}, function(result){
+
+      if (result.content && result.content.Customer){
+        $scope.customers = result.content.Customer;
+      } else {
+        $scope.customers = [];
+      }
+
+    });  
+  }
   
-  $scope.newCustomer = function(){
+  $scope.update = update;
+  update();
+  
+  $scope.newCustomer = function(_Customer_){
+    if (!_Customer_) {
+      var _Customer_ = {};
+    }
     var modalInstance = $uibModal.open({
       templateUrl: 'partials/modals/new_customer.html',
       controller: 'ModalNewCustomerCtrl',
-      scope : $scope
+      scope : $scope,
+      resolve : {
+        Customer : _Customer_
+      }
     });
   };
   
 });
 
 
-app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalInstance){
+app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalInstance, Customer){
   
   $scope.close = function(){ $uibModalInstance.close(); }
   
+  if (Customer.id)  {
+    $scope.Customer = Customer;
+    $scope.Customer.birthday = new Date(Customer.birthday);
+  }
   
   $scope.save = function(customer){ 
 
@@ -37,8 +52,9 @@ app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalI
     if (!$scope.name_empty && !$scope.email_empty && !$scope.phone_empty) {
       CustomersAPI.post(customer, function(result){
          if (result.content && result.content.Customer) {
-           $scope.$parent.customers.push(result.content.Customer);
-            $uibModalInstance.close();
+           $scope.$parent.update();
+           //$scope.$parent.customers.push(result.content.Customer);
+           $uibModalInstance.close();
          }
       });
     }

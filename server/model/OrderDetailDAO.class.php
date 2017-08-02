@@ -35,6 +35,23 @@ class OrderDetailDAO extends \app\model\DAO {
 
   }
   
+  public function total($id_order){
+    $sql = "select (SUM(tod.quantity) * sum(tod.unit_price) - sum(tod.discount)) as total "
+      . "from tab_order_details tod "
+      . "where tod.id_orders = :id_orders "
+      . "group by tod.id_product";
+      
+      $rs = $this->sendQuery($sql, array("id_orders" => $id_order));
+      $total = $rs->getResultSet();
+      
+      if (isset($total[0])) {
+        return $total[0]['total'];
+      } else {
+        return 0;
+      }
+
+  }
+  
   public function modeltoArray(\stphp\Database\iDataModel $data_model) {
     return $data_model->arraySerialize();
   }

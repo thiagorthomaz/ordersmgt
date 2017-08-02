@@ -5,7 +5,14 @@ app.controller("OrdersCtrl", function ($scope, OrdersAPI, $uibModal) {
     OrdersAPI.all({}, function (result) {
 
       if (result.content && result.content.Purchase) {
+        for (var i in result.content.Purchase) {
+          result.content.Purchase[i].order.order_date = new Date(result.content.Purchase[i].order.order_date);
+          result.content.Purchase[i].order.required_date = new Date(result.content.Purchase[i].order.required_date);
+          result.content.Purchase[i].order.shipped_date = new Date(result.content.Purchase[i].order.shipped_date);
+          
+        }
         $scope.purchases = result.content.Purchase;
+        
       } else {
         $scope.purchases = [];
       }
@@ -15,13 +22,16 @@ app.controller("OrdersCtrl", function ($scope, OrdersAPI, $uibModal) {
 
   $scope.atualizarLista();
   
-  $scope.newOrder = function () {
+  $scope.newOrder = function (_order_) {
+    if (!_order_) {
+      _order_ = {};
+    }
     var modalInstance = $uibModal.open({
       templateUrl: 'partials/modals/order.html',
       controller: 'ModalOrderCtrl',
       scope: $scope,
       resolve : {
-        ProductUpdated : new Object()
+        OrderToUpdate : _order_
       }
     });
 
@@ -40,6 +50,7 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
     OrdersAPI.get({order_id : order_id}, function(result){
 
       var _purchase = result.content.Purchase;
+      $scope.purchase = _purchase;
       $scope.customer = _purchase.customer;
       $scope.order = _purchase.order;
       $scope.order.required_date = new Date(_purchase.order.required_date);
@@ -146,11 +157,28 @@ app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, 
 
 });
 
-app.controller("ModalOrderCtrl", function ($scope, $uibModalInstance, CustomersAPI, OrdersAPI) {
-
+app.controller("ModalOrderCtrl", function ($scope, $uibModalInstance, CustomersAPI, OrdersAPI, OrderToUpdate) {
+  
+  console.log(OrderToUpdate);
+  
+  if (OrderToUpdate.id) {
+    $scope.Order = OrderToUpdate;  
+  }
+  
   CustomersAPI.all(function (result) {
     var customers = result.content.Customer;
     $scope.customer_list = customers;
+    
+    if (OrderToUpdate.id) {
+      for (var i in customers) {
+        if (customers[i].id == OrderToUpdate.id_customer) {
+          $scope.Order.customer = customers[i];
+          break;
+        }
+      }
+      
+    }
+    
   });
   
   $scope.close = function (p) {

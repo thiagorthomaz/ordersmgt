@@ -13,7 +13,7 @@ class Customer implements \stphp\Database\iDataModel, \stphp\ArraySerializable  
   private $name;
   private $email;
   private $phone;
-  private $credit;
+  private $birthday;
   
   
   function getId() {
@@ -32,8 +32,8 @@ class Customer implements \stphp\Database\iDataModel, \stphp\ArraySerializable  
     return $this->phone;
   }
 
-  function getCredit() {
-    return $this->credit;
+  function getBirthday() {
+    return $this->birthday;
   }
 
   function setId($id) {
@@ -52,8 +52,8 @@ class Customer implements \stphp\Database\iDataModel, \stphp\ArraySerializable  
     $this->phone = $phone;
   }
 
-  function setCredit($credit) {
-    $this->credit = $credit;
+  function setBirthday($birthday) {
+    $this->birthday = $birthday;
   }
 
 

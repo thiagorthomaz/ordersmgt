@@ -9,9 +9,7 @@ namespace app\controller;
  */
 class Orders extends \app\controller\Controller {
 
-  private function formatDate($date, $format = "d-m-Y H:i:s") {
-    return date($format, strtotime($date));
-  }
+
 
   public function post() {
     
@@ -46,24 +44,34 @@ class Orders extends \app\controller\Controller {
   
   public function saveOrder(){
     
+    $id = $this->request->getParams("id");
     $customer = $this->request->getParams("customer");
     $paid = $this->request->getParams("paid");
     $required_date = $this->request->getParams("required_date");
     $shipped_date = $this->request->getParams("shipped_date");
     
+    if (is_null($required_date)) {
+      $required_date = date("Y-m-d H:i:s");
+    }
     
     $order_dao = new \app\model\OrderDAO();
     $order = new \app\model\Order();
     
-    
+    $order->setId($id);
     $order->setId_customer($customer['id']);
     $order->setRequired_date($this->formatDate($required_date, "Y-m-d H:i:s"));
     $order->setShipped_date($this->formatDate($shipped_date, "Y-m-d H:i:s"));
     $order->setPaid($paid);
     $order->setOrder_date(date("Y-m-d H:i:s"));
 
+    if (!is_null($id)) {
+      $criteria = array('id' => $id);
+      $saved = $order_dao->update($order, $criteria);
+    } else {
+      $saved = $order_dao->insert($order);
+    }
     
-    if ($order_dao->insert($order)) {
+    if ($saved) {
       $this->addResponseContent($order);
       return $this->getResponse();
     } else {

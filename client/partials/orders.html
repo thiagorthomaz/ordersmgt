@@ -8,22 +8,26 @@
       <th>Date</th> 
       <th>Paid (R$)</th> 
       <th>Total (R$)</th> 
+      <th></th>
     </tr> 
   </thead> 
   <tbody> 
 
     <tr ng-repeat="p in purchases">
       <td>
-<!--        <a href="" ng-click="editOrder(p.order.id);"># {{p.order.id}}</a>-->
         <a ui-sref="default.detail({order_id : p.order.id})"># {{p.order.id}}</a>
-      </td> 
+      </td>
       <td>{{p.customer.name}}</td> 
-      <td>{{p.order.order_date}}</td> 
-      <td>{{p.order.paid}}</td> 
-      
-      <td>{{p.order_detail.quantity * p.order_detail.unit_price | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+      <td>{{p.order.order_date| date:short }}</td> 
+      <td>{{p.order.paid| currency:NUMBER_FORMATS.CURRENCY_SYM }}</td> 
+      <td> {{ p.total | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+      <td>
+        <button class="btn btn-default" ng-click="newOrder(p.order)">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        </button>
+      </td>
     </tr>
-    
+
   </tbody>
 </table>
 

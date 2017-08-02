@@ -29,6 +29,7 @@
         <div class="form-group">
           <label for="paid">Paid</label>
           <input type="text" id="paid" ng-model="Order.paid" class="form-control" ui-number-mask>
+          <p ng-if="Order.customer && Order.customer.credit > 0" class="help-block">Credit: {{Order.customer.credit | currency:NUMBER_FORMATS.CURRENCY_SYM}}</p>
         </div>
 
 

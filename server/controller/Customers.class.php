@@ -42,15 +42,24 @@ class Customers extends \app\controller\Controller {
     unset($params['Customers_post']);
         
     $customer = new \app\model\Customer();
-    $customer->setCredit(0);
-
+    
     foreach ($params as $field => $value) {
       call_user_func(array($customer, "set".$field), $value);
     }
 
+    $date = $customer->getBirthday();
+    $customer->setBirthday($this->formatDate($date, "Y-m-d"));
+    
     $dao = new \app\model\CustomerDAO();
     
-    if ($dao->insert($customer)) {
+    if (!empty($customer->getId())) {
+      $criteria = array("id" => $customer->getId());
+      $saved = $dao->update($customer, $criteria);
+    } else {
+      $saved = $dao->insert($customer);
+    }
+    
+    if ($saved) {
       $this->addResponseContent($customer);
       return $this->getResponse();
     } else {

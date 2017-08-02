@@ -1,0 +1,5 @@
+#redirect to client
+#RewriteEngine on
+#RewriteCond %{HTTP_HOST} !^adm.angelicachybior.com.br/$ [NC]
+#RewriteRule ^$ http://adm.angelicachybior.com.br/client/$1 [L,R=301]
+

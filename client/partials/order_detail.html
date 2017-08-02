@@ -17,6 +17,7 @@
 
 
         <div class="col col-md-6">
+          <p><strong>CUSTOMER</strong></p>
           <p>
             <strong>ID #</strong> {{customer.id}}
           </p>
@@ -31,13 +32,16 @@
           </p>
 
           <p>
-            <strong>Credit </strong> {{customer.credit | currency:NUMBER_FORMATS.CURRENCY_SYM }}
+            <strong>Birthday: </strong> {{customer.birthday | date:short }}
           </p>  
         </div>
 
 
         <div class="col col-md-6">
-
+          <p><strong>RESUME</strong></p>
+          <p>
+            <strong>Total:</strong> {{purchase.total | currency:NUMBER_FORMATS.CURRENCY_SYM }}
+          </p>
           <p>
             <strong>Paid:</strong> {{order.paid | currency:NUMBER_FORMATS.CURRENCY_SYM }}
           </p>

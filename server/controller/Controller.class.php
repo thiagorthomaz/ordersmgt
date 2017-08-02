@@ -35,5 +35,9 @@ abstract class Controller extends \stphp\Controller {
 
   }
   
+  protected function formatDate($date, $format = "d-m-Y H:i:s") {
+    return date($format, strtotime($date));
+  }
+  
   
 }
