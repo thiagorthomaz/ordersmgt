@@ -40,7 +40,7 @@ class Customers extends \app\controller\Controller {
     
     $params = $this->getRequest()->getAllParams();
     unset($params['Customers_post']);
-        
+    
     $customer = new \app\model\Customer();
     
     foreach ($params as $field => $value) {
@@ -48,7 +48,9 @@ class Customers extends \app\controller\Controller {
     }
 
     $date = $customer->getBirthday();
-    $customer->setBirthday($this->formatDate($date, "Y-m-d"));
+    if (!is_null($date)) {
+      $customer->setBirthday($this->formatDate($date, "Y-m-d"));  
+    }
     
     $dao = new \app\model\CustomerDAO();
     

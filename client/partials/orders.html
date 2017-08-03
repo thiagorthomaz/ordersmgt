@@ -13,7 +13,7 @@
   </thead> 
   <tbody> 
 
-    <tr ng-repeat="p in purchases">
+    <tr ng-repeat="p in purchases | orderBy:'-order.id'">
       <td>
         <a ui-sref="default.detail({order_id : p.order.id})"># {{p.order.id}}</a>
       </td>

@@ -54,6 +54,10 @@ class Orders extends \app\controller\Controller {
       $required_date = date("Y-m-d H:i:s");
     }
     
+    if (is_null($paid)) {
+      $paid = 0;
+    }
+    
     $order_dao = new \app\model\OrderDAO();
     $order = new \app\model\Order();
     

@@ -44,12 +44,12 @@ app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalI
   }
   
   $scope.save = function(customer){ 
+    
+    console.log(customer);
 
     if (!customer || !customer.name){ $scope.name_empty = true; } else { $scope.name_empty = false; }
-    if (!customer || !customer.email){ $scope.email_empty = true; } else { $scope.email_empty = false; }
-    if (!customer || !customer.phone){ $scope.phone_empty = true; } else { $scope.phone_empty = false; }
-
-    if (!$scope.name_empty && !$scope.email_empty && !$scope.phone_empty) {
+    
+    if (!$scope.name_empty) {
       CustomersAPI.post(customer, function(result){
          if (result.content && result.content.Customer) {
            $scope.$parent.update();
