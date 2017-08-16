@@ -43,7 +43,9 @@
             <strong>Total:</strong> {{purchase.total | currency:NUMBER_FORMATS.CURRENCY_SYM }}
           </p>
           <p>
-            <strong>Paid:</strong> {{order.paid | currency:NUMBER_FORMATS.CURRENCY_SYM }}
+            <strong>Paid:</strong>
+            <i ng-if="order.paid === '1'" class="fa fa-check" aria-hidden="true"></i>
+            <i ng-if="!order.paid === '0'" class="fa fa-times" aria-hidden="true"></i>
           </p>
           <p>
             <strong>Required date: </strong> {{order.required_date | date:short }}
@@ -103,6 +105,7 @@
 
         <button class="btn btn-default btn-sm" type="button" ng-click="addProduct()">Add product</button>
 
+        <strong class="col-md-offset-7 col-xs-offset-6"><i>Total: {{purchase.total | currency:NUMBER_FORMATS.CURRENCY_SYM }} </i></strong>
       </div>
 
     </div>

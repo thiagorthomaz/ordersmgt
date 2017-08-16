@@ -55,7 +55,9 @@ class Orders extends \app\controller\Controller {
     }
     
     if (is_null($paid)) {
-      $paid = 0;
+      $paid = false;
+    } else {
+      $paid = true;
     }
     
     $order_dao = new \app\model\OrderDAO();
@@ -67,7 +69,7 @@ class Orders extends \app\controller\Controller {
     $order->setShipped_date($this->formatDate($shipped_date, "Y-m-d H:i:s"));
     $order->setPaid($paid);
     $order->setOrder_date(date("Y-m-d H:i:s"));
-
+    
     if (!is_null($id)) {
       $criteria = array('id' => $id);
       $saved = $order_dao->update($order, $criteria);
@@ -102,8 +104,19 @@ class Orders extends \app\controller\Controller {
       $id= null;
     }
     
-    $discount = $param_order_detail['discount'];
-    $quantity = $param_order_detail['quantity'];
+    if (isset($param_order_detail['discount'])) {
+      $discount = $param_order_detail['discount'];  
+    } else {
+      $discount = 0;
+    }
+    
+    if (isset($param_order_detail['quantity'])) {
+      $quantity = $param_order_detail['quantity'];  
+    } else {
+      $quantity = 0;
+    }
+    
+    
     $product_id = $param_order_detail['product_id'];
     $order_id = $param_order_detail['order_id'];
     $unit_price = $param_order_detail['unit_price'];

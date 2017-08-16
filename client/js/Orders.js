@@ -9,10 +9,10 @@ app.controller("OrdersCtrl", function ($scope, OrdersAPI, $uibModal) {
           result.content.Purchase[i].order.order_date = new Date(result.content.Purchase[i].order.order_date);
           result.content.Purchase[i].order.required_date = new Date(result.content.Purchase[i].order.required_date);
           result.content.Purchase[i].order.shipped_date = new Date(result.content.Purchase[i].order.shipped_date);
-          
+
         }
         $scope.purchases = result.content.Purchase;
-        
+
       } else {
         $scope.purchases = [];
       }
@@ -21,7 +21,7 @@ app.controller("OrdersCtrl", function ($scope, OrdersAPI, $uibModal) {
   }
 
   $scope.atualizarLista();
-  
+
   $scope.newOrder = function (_order_) {
     if (!_order_) {
       _order_ = {};
@@ -30,8 +30,8 @@ app.controller("OrdersCtrl", function ($scope, OrdersAPI, $uibModal) {
       templateUrl: 'partials/modals/order.html',
       controller: 'ModalOrderCtrl',
       scope: $scope,
-      resolve : {
-        OrderToUpdate : _order_
+      resolve: {
+        OrderToUpdate: _order_
       }
     });
 
@@ -47,7 +47,7 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
 
   function update() {
 
-    OrdersAPI.get({order_id : order_id}, function(result){
+    OrdersAPI.get({order_id: order_id}, function (result) {
 
       var _purchase = result.content.Purchase;
       $scope.purchase = _purchase;
@@ -58,64 +58,64 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
       $scope.order_detail = _purchase.order_detail;
 
     });
-    
+
   }
-  
+
   update();
-  
+
   $scope.update = update;
-  
+
   $scope.product_list = new Array();
-  
-  ProductsAPI.all(function(result){
-    
+
+  ProductsAPI.all(function (result) {
+
     if (result.content && result.content.Product) {
       $scope.product_list = result.content.Product;
     }
-    
+
   });
-  
-  $scope.addProduct = function(_order_detail_){
-    
+
+  $scope.addProduct = function (_order_detail_) {
+
     var modalInstance = $uibModal.open({
       templateUrl: 'partials/modals/product.html',
       controller: 'ModalOrderAddProductCtrl',
-      scope : $scope,
-      resolve : {
-        Order : $scope.order,
-        OrderDetail : _order_detail_
+      scope: $scope,
+      resolve: {
+        Order: $scope.order,
+        OrderDetail: _order_detail_
       }
     });
   };
-  
-  
-  $scope.getProductName = function(id){
+
+
+  $scope.getProductName = function (id) {
     var _list = $scope.product_list;
     for (var i in _list) {
       var _p = _list[i];
       if (_p.id == id) {
         return _p.name;
-      }      
+      }
     }
     return id;
   }
-  
-  $scope.removeProduct = function(_order_detail_) {
-    
-    OrdersAPI.deleteDetail({detail_id : _order_detail_.id}, function(_result_){      
+
+  $scope.removeProduct = function (_order_detail_) {
+
+    OrdersAPI.deleteDetail({detail_id: _order_detail_.id}, function (_result_) {
       if (_result_.type == "success") {
         update();
       }
     });
-    
+
   }
-  
+
 
 });
 
 app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, Order, OrderDetail, OrdersAPI) {
-  
-  
+
+
   if (OrderDetail) {
     Product = {};
     Product.id = OrderDetail.id;
@@ -124,15 +124,15 @@ app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, 
     Product.quantity = OrderDetail.quantity;
     $scope.Product = Product;
   }
-  
+
   $scope.product_list = $scope.$parent.product_list;
 
   $scope.close = function (p) {
     $uibModalInstance.close();
   }
-  
-  function getUnirPrice(product_id){
-    
+
+  function getUnirPrice(product_id) {
+
     for (var i in $scope.product_list) {
       var _p = $scope.product_list[i];
       console.log(_p);
@@ -140,35 +140,43 @@ app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, 
         return _p.unit_price;
       }
     }
-    
+
   }
-  
-  $scope.save = function(Product) {
+
+  $scope.save = function (Product) {
     Product.order_id = Order.id;
     Product.unit_price = getUnirPrice(Product.product_id);
-    
-    OrdersAPI.saveProduct({OrderDetail: Product}, function(result){
+
+    OrdersAPI.saveProduct({OrderDetail: Product}, function (result) {
       if (result.type = "success") {
         $scope.$parent.update();
         $scope.close();
       }
-    }); 
+    });
   }
 
 });
 
 app.controller("ModalOrderCtrl", function ($scope, $uibModalInstance, CustomersAPI, OrdersAPI, OrderToUpdate) {
+
   
-  console.log(OrderToUpdate);
-  
+
   if (OrderToUpdate.id) {
-    $scope.Order = OrderToUpdate;  
+    $scope.Order = OrderToUpdate;
   }
-  
+
+  if ($scope.Order.paid == "1") {
+    $scope.Order.paid = true;
+  } else {
+    $scope.Order.paid = false;
+  }
+
+  console.log(OrderToUpdate);
+
   CustomersAPI.all(function (result) {
     var customers = result.content.Customer;
     $scope.customer_list = customers;
-    
+
     if (OrderToUpdate.id) {
       for (var i in customers) {
         if (customers[i].id == OrderToUpdate.id_customer) {
@@ -176,19 +184,19 @@ app.controller("ModalOrderCtrl", function ($scope, $uibModalInstance, CustomersA
           break;
         }
       }
-      
+
     }
-    
+
   });
-  
+
   $scope.close = function (p) {
     $uibModalInstance.close();
   }
-  
-  
-  $scope.saveOrder = function(Order){
-    
-    OrdersAPI.saveOrder(Order, function(result){
+
+
+  $scope.saveOrder = function (Order) {
+
+    OrdersAPI.saveOrder(Order, function (result) {
       if (result.content && result.content.Order) {
         $scope.$parent.atualizarLista();
         $scope.close();

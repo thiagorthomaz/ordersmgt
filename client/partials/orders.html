@@ -6,20 +6,23 @@
       <th>Order</th> 
       <th>Customer</th> 
       <th>Date</th> 
-      <th>Paid (R$)</th> 
+      <th>Paid</th> 
       <th>Total (R$)</th> 
       <th></th>
     </tr> 
   </thead> 
   <tbody> 
 
-    <tr ng-repeat="p in purchases | orderBy:'-order.id'">
+    <tr ng-repeat="p in purchases| orderBy:'-order.id'">
       <td>
         <a ui-sref="default.detail({order_id : p.order.id})"># {{p.order.id}}</a>
       </td>
       <td>{{p.customer.name}}</td> 
       <td>{{p.order.order_date| date:short }}</td> 
-      <td>{{p.order.paid| currency:NUMBER_FORMATS.CURRENCY_SYM }}</td> 
+      <td> 
+        <i ng-if="p.order.paid === '1'" class="fa fa-check" aria-hidden="true"></i>
+        <i ng-if="p.order.paid === '0'" class="fa fa-times" aria-hidden="true"></i>
+      </td> 
       <td> {{ p.total | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
       <td>
         <button class="btn btn-default" ng-click="newOrder(p.order)">
