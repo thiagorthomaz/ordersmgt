@@ -54,7 +54,11 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
       $scope.customer = _purchase.customer;
       $scope.order = _purchase.order;
       $scope.order.required_date = new Date(_purchase.order.required_date);
-      $scope.order.shipped_date = new Date(_purchase.order.shipped_date);
+
+      if (_purchase.order.shipped_date) {
+        $scope.order.shipped_date = new Date(_purchase.order.shipped_date);
+      }
+
       $scope.order_detail = _purchase.order_detail;
 
     });
@@ -115,9 +119,13 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
 
 app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, Order, OrderDetail, OrdersAPI) {
 
+console.log(Order);
 
-  if (OrderDetail) {
-    Product = {};
+  Product = {};
+  Product.order_id = Order.id;
+  $scope.Product = Product;
+  
+  if (OrderDetail) {  
     Product.id = OrderDetail.id;
     Product.product_id = OrderDetail.id_product;
     Product.discount = OrderDetail.discount;
@@ -131,24 +139,16 @@ app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, 
     $uibModalInstance.close();
   }
 
-  function getUnirPrice(product_id) {
-
-    for (var i in $scope.product_list) {
-      var _p = $scope.product_list[i];
-      console.log(_p);
-      if (_p.id = product_id) {
-        return _p.unit_price;
-      }
-    }
-
-  }
-
   $scope.save = function (Product) {
-    Product.order_id = Order.id;
-    Product.unit_price = getUnirPrice(Product.product_id);
 
     OrdersAPI.saveProduct({OrderDetail: Product}, function (result) {
-      if (result.type = "success") {
+
+      if (result.type == "error") {
+        $scope.message = result.message;
+      }
+
+
+      if (result.type == "success") {
         $scope.$parent.update();
         $scope.close();
       }
@@ -159,19 +159,16 @@ app.controller("ModalOrderAddProductCtrl", function ($scope, $uibModalInstance, 
 
 app.controller("ModalOrderCtrl", function ($scope, $uibModalInstance, CustomersAPI, OrdersAPI, OrderToUpdate) {
 
-  
+
 
   if (OrderToUpdate.id) {
     $scope.Order = OrderToUpdate;
+    if ($scope.Order.paid == "1") {
+      $scope.Order.paid = true;
+    } else {
+      $scope.Order.paid = false;
+    }
   }
-
-  if ($scope.Order.paid == "1") {
-    $scope.Order.paid = true;
-  } else {
-    $scope.Order.paid = false;
-  }
-
-  console.log(OrderToUpdate);
 
   CustomersAPI.all(function (result) {
     var customers = result.content.Customer;

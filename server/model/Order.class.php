@@ -62,6 +62,9 @@ class Order implements \stphp\Database\iDataModel, \stphp\ArraySerializable {
   }
 
   function setShipped_date($shipped_date) {
+    if (date("Y", strtotime($shipped_date)) == 1969) {
+      $shipped_date = null;
+    }
     $this->shipped_date = $shipped_date;
   }
 

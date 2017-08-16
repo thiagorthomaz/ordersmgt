@@ -53,20 +53,30 @@ class Orders extends \app\controller\Controller {
     if (is_null($required_date)) {
       $required_date = date("Y-m-d H:i:s");
     }
+
     
-    if (is_null($paid)) {
-      $paid = false;
+    if (is_null($paid) || !$paid) {
+      $paid = 0;
     } else {
-      $paid = true;
+      $paid = 1;
     }
     
+    
+
     $order_dao = new \app\model\OrderDAO();
     $order = new \app\model\Order();
     
     $order->setId($id);
     $order->setId_customer($customer['id']);
-    $order->setRequired_date($this->formatDate($required_date, "Y-m-d H:i:s"));
-    $order->setShipped_date($this->formatDate($shipped_date, "Y-m-d H:i:s"));
+    if (!is_null($required_date)) {
+      $order->setRequired_date($this->formatDate($required_date, "Y-m-d H:i:s"));  
+    }
+    
+    if (!is_null($shipped_date)) {
+      $formated_shipped_date = $this->formatDate($shipped_date, "Y-m-d H:i:s");
+      $order->setShipped_date($this->formatDate($formated_shipped_date, "Y-m-d H:i:s"));  
+    }
+    
     $order->setPaid($paid);
     $order->setOrder_date(date("Y-m-d H:i:s"));
     
@@ -97,6 +107,7 @@ class Orders extends \app\controller\Controller {
     $order_detail = new \app\model\OrderDetail();
     $order_detail_dao = new \app\model\OrderDetailDAO();
     $param_order_detail = $this->request->getParams("OrderDetail");
+    $product_dao = new \app\model\ProductsDAO();
     
     if (isset($param_order_detail['id'])) {
       $id = $param_order_detail['id'];  
@@ -116,10 +127,27 @@ class Orders extends \app\controller\Controller {
       $quantity = 0;
     }
     
+    if (!isset($param_order_detail['product_id'])) {
+      $product_id = -1;
+    } else {
+      $product_id = $param_order_detail['product_id'];
+    }
     
-    $product_id = $param_order_detail['product_id'];
     $order_id = $param_order_detail['order_id'];
-    $unit_price = $param_order_detail['unit_price'];
+    
+    $product = new \app\model\Product();
+    $product->setId($product_id);
+    $product_result = $product_dao->select($product);
+
+    if (!isset($product_result[0]) || empty($product_result[0])) {
+      $error = new \app\view\ErrorView();
+      $error->setMessange("Product not found! ");
+      return $error;
+    } else {
+      $product = $product_result[0];
+    }
+    
+    $unit_price = $product->getUnit_price();
     
     
     $order_detail->setDiscount($discount);

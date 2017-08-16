@@ -33,6 +33,7 @@
 
           <p>
             <strong>Birthday: </strong> {{customer.birthday | date:short }}
+            <span ng-if="!customer.birthday">Not informed</span>
           </p>  
         </div>
 
@@ -52,6 +53,7 @@
           </p>
           <p>
             <strong>Shipped date: </strong> {{order.shipped_date | date:short}}
+            <span ng-if="!order.shipped_date">Not informed</span>
           </p>
 
         </div>
