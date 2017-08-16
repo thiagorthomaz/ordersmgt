@@ -3,6 +3,7 @@
 <table class="table table-striped"> 
   <thead> 
     <tr> 
+      <th>Id</th> 
       <th>Name</th> 
       <th>E-mail</th> 
       <th>Phone</th> 
@@ -13,6 +14,9 @@
   <tbody> 
 
     <tr ng-repeat="c in customers">
+      <td>
+         <a ui-sref="default.customer_detail({id : c.id})"># {{c.id}}</a>
+      </td> 
       <td>{{c.name}}</td> 
       <td>{{c.email}}</td> 
       <td>{{c.phone}}</td> 

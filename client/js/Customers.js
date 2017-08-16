@@ -67,9 +67,24 @@ app.controller("ModalNewCustomerCtrl", function($scope, CustomersAPI, $uibModalI
 
 app.factory('CustomersAPI', ['$resource', 'config', function ($resource, config) {
     return $resource(config.baseUrl, {}, {
+      get: {method: 'GET', url: config.baseUrl + "/?Customers.get", cache: false, isArray: false},
       all: {method: 'GET', url: config.baseUrl + "/?Customers.all", cache: false, isArray: false},
-      post: {method: 'POST', url: config.baseUrl + "/?Customers.post", cache: false, isArray: false}
-      
+      post: {method: 'POST', url: config.baseUrl + "/?Customers.post", cache: false, isArray: false} 
     });
   }
 ]);
+
+
+
+app.controller("CustomerDetailCtrl", function($scope, $stateParams, CustomersAPI, $uibModal){
+  
+  CustomersAPI.get($stateParams , function(result){
+    console.log(result);
+    $scope.customer = result.content.Customer;
+    
+  });
+
+
+
+  
+});

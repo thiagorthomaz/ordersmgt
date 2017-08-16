@@ -47,6 +47,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'partials/customers.html'
   };
   
+  var customerDetailState = {
+    name: 'default.customer_detail',
+    url: '/customers/:id',
+    controller: 'CustomerDetailCtrl',
+    templateUrl: 'partials/customer_detail.html'
+  };
+  
   var productsState = {
     name: 'default.products',
     url: '/products',
@@ -60,6 +67,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider.state(customersState);
   $stateProvider.state(productsState);
   $stateProvider.state(orderDetailState);
+  $stateProvider.state(customerDetailState);
   
  
  

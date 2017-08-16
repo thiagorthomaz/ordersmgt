@@ -34,6 +34,17 @@ class Customers extends \app\controller\Controller {
 
   public function get() {
     
+    $id = $this->request->getParams("id");
+    
+    $customers_dao = new \app\model\CustomerDAO();
+    $customer = new \app\model\Customer();
+    
+    $customer->setId($id);
+    $customer_result = $customers_dao->select($customer);
+    
+    $this->addResponseContent($customer_result[0]);
+    
+    return $this->getResponse();
   }
 
   public function post() {
