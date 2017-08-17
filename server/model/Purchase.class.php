@@ -14,6 +14,7 @@ class Purchase implements \stphp\ArraySerializable {
   private $order;
   private $order_detail = array();
   private $total = 0;
+  private $adjustments = array();
   
   public function __construct(\app\model\Order $order) {
     
@@ -27,6 +28,8 @@ class Purchase implements \stphp\ArraySerializable {
     $customer_dao = new \app\model\CustomerDAO();
     $order_detail_dao = new \app\model\OrderDetailDAO();
     $product_dao = new \app\model\ProductsDAO();
+    $adjustment_dao = new \app\model\AdjustmentDAO();
+    $this->adjustments = $adjustment_dao->findByOrderId($order->getId());
     
     $customer = $customer_dao->getModel();
     $customer->setId($id_customer);

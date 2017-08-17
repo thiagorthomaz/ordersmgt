@@ -84,7 +84,4 @@ app.controller("CustomerDetailCtrl", function($scope, $stateParams, CustomersAPI
     
   });
 
-
-
-  
 });

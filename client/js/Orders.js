@@ -52,6 +52,13 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
       var _purchase = result.content.Purchase;
       $scope.purchase = _purchase;
       $scope.customer = _purchase.customer;
+      
+      for (var ia in _purchase.adjustments) {
+        _purchase.adjustments[ia].date = new Date(_purchase.adjustments[ia].date);
+      }
+      
+      $scope.adjustments = _purchase.adjustments;
+      
       $scope.order = _purchase.order;
       $scope.order.required_date = new Date(_purchase.order.required_date);
 
@@ -91,6 +98,29 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
       }
     });
   };
+  
+  $scope.openAdjustment = function () {
+
+    var modalInstance = $uibModal.open({
+      templateUrl: 'partials/modals/order_adjustment.html',
+      controller: 'ModalOrderAdjustmentCtrl',
+      scope: $scope,
+      resolve: {
+        Order: $scope.order
+      }
+    });
+  };
+  
+  
+  $scope.deleteAdjustment = function(_adjustment_, i){
+
+    OrdersAPI.deleteAdjustment({id : _adjustment_.id}, function(result) {
+      if (result.type = "success") {
+        $scope.update();
+      }
+    });
+    
+  }
 
 
   $scope.getProductName = function (id) {
@@ -209,10 +239,41 @@ app.factory('OrdersAPI', ['$resource', 'config', function ($resource, config) {
       post: {method: 'POST', url: config.baseUrl + "/?Orders.post", cache: false, isArray: false},
       saveOrder: {method: 'POST', url: config.baseUrl + "/?Orders.saveOrder", cache: false, isArray: false},
       saveProduct: {method: 'POST', url: config.baseUrl + "/?Orders.saveProduct", cache: false, isArray: false},
+      saveAdjustment: {method: 'POST', url: config.baseUrl + "/?Orders.saveAdjustment", cache: false, isArray: false},
       productsFromOrder: {method: 'GET', url: config.baseUrl + "/?Orders.productsFromOrder", cache: false, isArray: false},
       deleteDetail: {method: 'GET', url: config.baseUrl + "/?Orders.deleteDetail", cache: false, isArray: false},
+      deleteAdjustment: {method: 'GET', url: config.baseUrl + "/?Orders.deleteAdjustment", cache: false, isArray: false},
       get: {method: 'GET', url: config.baseUrl + "/?Orders.get", cache: false, isArray: false}
 
     });
   }
 ]);
+
+
+app.controller("ModalOrderAdjustmentCtrl", function($scope, $uibModalInstance, OrdersAPI, Order){
+
+
+  $scope.Adjustment = {};
+  $scope.Adjustment.order_id = Order.id;
+  $scope.Adjustment.amount = 0;
+  $scope.Adjustment.change = true;
+  $scope.Adjustment.date = new Date();
+
+  $scope.save = function(_Adjustment){
+    OrdersAPI.saveAdjustment(_Adjustment, function(result) {
+
+      if (result.type == "success") {
+        $scope.$parent.update();
+        $uibModalInstance.close();
+      }
+
+    });
+    
+  }
+  
+  $scope.close = function(){
+    $uibModalInstance.close();
+  }
+  
+
+});
