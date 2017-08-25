@@ -6,7 +6,14 @@ app.controller("CustomersCtrl", function($scope, CustomersAPI, $uibModal){
     CustomersAPI.all({}, function(result){
 
       if (result.content && result.content.Customer){
-        $scope.customers = result.content.Customer;
+        
+        var _customers = result.content.Customer;
+        
+        for (var i in _customers) {
+          _customers[i].birthday = new Date(_customers[i].birthday);
+        }
+
+        $scope.customers = _customers;
       } else {
         $scope.customers = [];
       }

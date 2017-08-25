@@ -51,6 +51,8 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
 
       var _purchase = result.content.Purchase;
       $scope.purchase = _purchase;
+
+      _purchase.customer.birthday = new Date(_purchase.customer.birthday);
       $scope.customer = _purchase.customer;
       
       for (var ia in _purchase.adjustments) {
@@ -66,6 +68,9 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
         $scope.order.shipped_date = new Date(_purchase.order.shipped_date);
       }
 
+      for (var i in _purchase.order_detail) {
+        _purchase.order_detail[i].date = new Date(_purchase.order_detail[i].date);
+      }
       $scope.order_detail = _purchase.order_detail;
 
     });
