@@ -27,6 +27,19 @@ class AdjustmentDAO extends \app\model\DAO {
     return $data_model->arraySerialize();
   }
   
+public function total($id_order){
+  $sql = "select sum(toa.credit) as total_credit, sum(toa.change) as total_change from tab_order_adjustment toa where toa.id_order = :id_order";
+  $rs = $this->sendQuery($sql, array("id_order" => $id_order));
+  $total = $rs->getResultSet();
+  
+  if (isset($total[0])) {
+    return $total[0];
+  } else {
+    return array( 'total_credit' => 0, 'total_change' => 0 );
+  }
+
+}
+
   public function findByOrderId($id_order) {
 
     $sql = "select id from tab_order_adjustment where id_order = :id_order";

@@ -13,8 +13,11 @@ class Purchase implements \stphp\ArraySerializable {
   private $customer;
   private $order;
   private $order_detail = array();
-  private $total = 0;
-  private $to_pay;
+  private $total_order = 0;
+  private $total_change = 0;
+  private $total_credit = 0;
+  private $total_paid = 0;
+
   private $adjustments = array();
   
   public function __construct(\app\model\Order $order) {
@@ -31,6 +34,7 @@ class Purchase implements \stphp\ArraySerializable {
     $product_dao = new \app\model\ProductsDAO();
     $adjustment_dao = new \app\model\AdjustmentDAO();
     $this->adjustments = $adjustment_dao->findByOrderId($order->getId());
+    $total_adjustment = $adjustment_dao->total($order->getId());
     
     $customer = $customer_dao->getModel();
     $customer->setId($id_customer);
@@ -38,7 +42,15 @@ class Purchase implements \stphp\ArraySerializable {
     $order_detail = $order_detail_dao->getModel();
     
     $this->order_detail = $order_detail_dao->findByOrderId($order->getId());
-    $this->total = $order_detail_dao->total($order->getId());
+    $this->total_order = $order_detail_dao->total($order->getId());
+    $this->total_paid = $total_adjustment['total_credit'];
+    $this->total_change = $total_adjustment['total_change'];
+    $this->total_credit = $total_adjustment['total_credit'] - $total_adjustment['total_change'] - $this->total_order;
+    
+    
+    
+    
+
 
     $product = $product_dao->getModel();
     

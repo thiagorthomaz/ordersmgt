@@ -40,20 +40,39 @@
 
         <div class="col col-md-6">
           <p><strong>RESUME</strong></p>
-          <p>
-            <strong>Total:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
-          </p>
-          <p>
-            <strong>Change:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
-          </p>
-          <p>
-            <strong>Credit added:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
-          </p>
-          <p>
-            <strong>Paid:</strong>
-            <i ng-if="order.paid === '1'" class="fa fa-check" aria-hidden="true"></i>
-            <i ng-if="!order.paid === '0'" class="fa fa-times" aria-hidden="true"></i>
-          </p>
+
+          <table class="table">
+            <tbody>
+              <tr>
+                <td><strong>Paid</strong></td>
+                <td class="text-success">{{purchase.total_paid | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+              </tr>
+              <tr>
+                <td><strong>Change</strong></td>
+                <td class="text-danger">-{{purchase.total_change | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+              </tr>
+              <tr>
+                <td><strong>Total order</strong></td>
+                <td>{{purchase.total_order | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+              </tr>
+
+              <tr ng-if="purchase.total_credit < 0" class="danger">
+                <td><strong>Debit</strong></td>
+                <td>{{purchase.total_credit | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+              </tr>
+
+              <tr ng-if="purchase.total_credit >= 0" class="success">
+                <td><strong>Credit</strong></td>
+                <td>{{purchase.total_credit | currency:NUMBER_FORMATS.CURRENCY_SYM }}</td>
+              </tr>
+
+            </tbody>
+
+            
+          </table>
+                 
+          
+          <!--
           <p>
             <strong>Required date: </strong> {{order.required_date| date:short }}
           </p>
@@ -61,7 +80,7 @@
             <strong>Shipped date: </strong> {{order.shipped_date| date:short}}
             <span ng-if="!order.shipped_date">Not informed</span>
           </p>
-
+          -->
         </div>
 
       </div>
@@ -84,13 +103,13 @@
 
             <tr ng-repeat="a in adjustments">
               <td>
-                {{a.date| date:short }}
+                {{a.date | date:short }}
               </td>
               <td>
-                {{a.credit| currency:NUMBER_FORMATS.CURRENCY_SYM }}
+                {{a.credit | currency:NUMBER_FORMATS.CURRENCY_SYM }}
               </td>
               <td>
-                {{a.change| currency:NUMBER_FORMATS.CURRENCY_SYM }}
+                {{a.change | currency:NUMBER_FORMATS.CURRENCY_SYM }}
               </td>
               <td>
                 <button class="btn btn-default" ng-click="deleteAdjustment(a, $index)">
@@ -101,7 +120,7 @@
 
             </tr>
             <tr>
-              <td colspan="2" class="text-center">
+              <td colspan="3" class="text-center">
                 <p ng-if="adjustments.length == 0">No payment made.</p>
                 <p ng-if="adjustments.length > 0">Add adjustment.</p>
               </td>
@@ -129,8 +148,9 @@
             <tr>
               <th>Product</th>
               <th>Price</th>
-              <th>Amount</th>
+              <th>Quantity</th>
               <th>Discount</th>
+              <th>date</th>
               <th>Total</th>
               <th></th>
             </tr>
@@ -148,7 +168,8 @@
               <td>{{getProductName(od.id_product) | uppercase}}</td>
               <td>{{od.unit_price| currency:NUMBER_FORMATS.CURRENCY_SYM}}</td>
               <td>{{od.quantity}}</td>
-              <td>{{od.discount| currency:NUMBER_FORMATS.CURRENCY_SYM}}</td>
+              <td>{{od.discount | currency:NUMBER_FORMATS.CURRENCY_SYM}}</td>
+              <td>{{od.date | date:short }}</td>
               <td>{{(od.unit_price * od.quantity) - od.discount | currency:NUMBER_FORMATS.CURRENCY_SYM}}</td>
 
               <td>
@@ -165,8 +186,8 @@
               <td colspan="4">
                 <button class="btn btn-default btn-sm" type="button" ng-click="addProduct()">Add product</button>        
               </td>
-              <td colspan="2">
-                <strong><i>Total: {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }} </i></strong>        
+              <td colspan="3">
+                <strong><i>Total: {{purchase.total_order| currency:NUMBER_FORMATS.CURRENCY_SYM }} </i></strong>        
               </td>
             </tr>
 

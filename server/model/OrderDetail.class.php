@@ -15,6 +15,7 @@ class OrderDetail implements \stphp\Database\iDataModel, \stphp\ArraySerializabl
   private $discount;
   private $quantity;
   private $unit_price;
+  private $date;
   
   
   function getId() {
@@ -39,6 +40,15 @@ class OrderDetail implements \stphp\Database\iDataModel, \stphp\ArraySerializabl
 
   function getId_orders() {
     return $this->id_orders;
+  }
+
+
+  function getDate() {
+    return $this->date;
+  }
+
+  function setDate($date) {
+    $this->date = $date;
   }
 
   function setId_orders($id_orders) {

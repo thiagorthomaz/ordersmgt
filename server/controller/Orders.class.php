@@ -54,11 +54,7 @@ class Orders extends \app\controller\Controller {
 
     if (is_null($paid) || !$paid) {
       $paid = 0;
-    } else {
-      $paid = 1;
     }
-
-
 
     $order_dao = new \app\model\OrderDAO();
     $order = new \app\model\Order();
@@ -128,6 +124,10 @@ class Orders extends \app\controller\Controller {
       $product_id = $param_order_detail['product_id'];
     }
 
+    if (!isset($param_order_detail['date'])) {
+      $order_detail->setDate(date("Y-m-d H:i:s"));
+    }
+    
     $order_id = $param_order_detail['order_id'];
 
     $product = new \app\model\Product();

@@ -171,7 +171,7 @@ console.log(Order);
   }
 
   $scope.save = function (Product) {
-
+console.log(Product);
     OrdersAPI.saveProduct({OrderDetail: Product}, function (result) {
 
       if (result.type == "error") {
@@ -277,8 +277,10 @@ app.controller("ModalOrderAdjustmentCtrl", function($scope, $uibModalInstance, O
   }
   
   $scope.calculateChange = function(credit){
-    if (credit > Purchase.total) {
-      $scope.Adjustment.change = credit - Purchase.total;
+    if (credit > Purchase.total_order) {
+      $scope.Adjustment.change = credit - Purchase.total_order;
+    } else {
+      $scope.Adjustment.change = 0.0;
     }
   }
 
