@@ -14,6 +14,7 @@ class Purchase implements \stphp\ArraySerializable {
   private $order;
   private $order_detail = array();
   private $total = 0;
+  private $to_pay;
   private $adjustments = array();
   
   public function __construct(\app\model\Order $order) {

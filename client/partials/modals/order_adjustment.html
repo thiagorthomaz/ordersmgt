@@ -12,14 +12,14 @@
         <div class="col-xs-12">
 
           <div class="form-group">
-            <label for="price">Amount</label>
-            <input type="text" class="form-control" id="price" ng-model="Adjustment.amount" ui-number-mask>
+            <label for="price">Credit</label>
+            <input type="text" class="form-control" id="price" ng-keyup="calculateChange(Adjustment.credit)" ng-model="Adjustment.credit" ui-number-mask>
           </div>
 
           <div class="form-group">
-            <label for="paid">Give the change</label>
-            <input type="checkbox" id="paid" ng-model="Adjustment.change">
-            <p class="help-block">Uncheck if you wont give the change to your customer.</p>
+            <label for="paid">Change</label>
+            <input type="text" class="form-control" id="price" ng-model="Adjustment.change" ui-number-mask>
+            <p class="help-block">Erase this field to keep a credit amout for the client.</p>
           </div>
 
           <div class="form-group">   

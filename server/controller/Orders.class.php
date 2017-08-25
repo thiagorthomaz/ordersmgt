@@ -252,7 +252,7 @@ class Orders extends \app\controller\Controller {
   public function saveAdjustment() {
 
     $id_order = $this->request->getParams("order_id");
-    $amount = $this->request->getParams("amount");
+    $credit = $this->request->getParams("credit");
     $date = $this->request->getParams("date");
     $change = $this->request->getParams("change");
 
@@ -263,13 +263,13 @@ class Orders extends \app\controller\Controller {
     $adjustment_dao = new \app\model\AdjustmentDAO();
     $adjustment = new \app\model\Adjustment();
     $adjustment->setId_order($id_order);
-    $adjustment->setAmount($amount);
+    $adjustment->setCredit($credit);
     $adjustment->setChange($change);
     $adjustment->setDate($this->formatDate($date, "Y-m-d"));
 
-    if (empty($adjustment->getAmount())) {
+    if (empty($adjustment->getCredit())) {
       $error = new \app\view\ErrorView();
-      $error->setMessange("Amount must be grater than 0.");
+      $error->setMessange("Credit must be grater than 0.");
       return $error;
     }
 

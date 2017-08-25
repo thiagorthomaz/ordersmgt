@@ -44,11 +44,9 @@
             <strong>Total:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
           </p>
           <p>
-            <strong>Amount</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
+            <strong>Change:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
           </p>
           <p>
-            <strong>Change:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
-            -
             <strong>Credit added:</strong> {{purchase.total| currency:NUMBER_FORMATS.CURRENCY_SYM }}
           </p>
           <p>
@@ -77,7 +75,8 @@
           <thead>
             <tr>
               <th>Date</th>
-              <th>Amount</th>
+              <th>Credit</th>
+              <th>Change</th>
               <th></th>
             </tr>
           </thead>
@@ -88,7 +87,10 @@
                 {{a.date| date:short }}
               </td>
               <td>
-                {{a.amount| currency:NUMBER_FORMATS.CURRENCY_SYM }}
+                {{a.credit| currency:NUMBER_FORMATS.CURRENCY_SYM }}
+              </td>
+              <td>
+                {{a.change| currency:NUMBER_FORMATS.CURRENCY_SYM }}
               </td>
               <td>
                 <button class="btn btn-default" ng-click="deleteAdjustment(a, $index)">
@@ -120,7 +122,7 @@
 
         <hr>
 
-        <h4>Sales order</h4>
+        <h4>Products sold</h4>
 
         <table class="table">
           <thead>
@@ -129,7 +131,7 @@
               <th>Price</th>
               <th>Amount</th>
               <th>Discount</th>
-              <th>Amount</th>
+              <th>Total</th>
               <th></th>
             </tr>
           </thead>

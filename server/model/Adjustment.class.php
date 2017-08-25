@@ -12,7 +12,7 @@ class Adjustment implements \stphp\Database\iDataModel, \stphp\ArraySerializable
   private $id;
   private $id_order;
   private $date;
-  private $amount;
+  private $credit;
   private $change;
 
   function getId() {
@@ -27,8 +27,8 @@ class Adjustment implements \stphp\Database\iDataModel, \stphp\ArraySerializable
     return $this->date;
   }
 
-  function getAmount() {
-    return $this->amount;
+  function getCredit() {
+    return $this->credit;
   }
 
   function getChange() {
@@ -51,8 +51,8 @@ class Adjustment implements \stphp\Database\iDataModel, \stphp\ArraySerializable
     $this->date = $date;
   }
 
-  function setAmount($amount) {
-    $this->amount = $amount;
+  function setCredit($credit) {
+    $this->credit = $credit;
   }
 
   public function arraySerialize() {

@@ -106,7 +106,8 @@ app.controller("OrderDetailCtrl", function ($scope, $stateParams, $uibModal, Pro
       controller: 'ModalOrderAdjustmentCtrl',
       scope: $scope,
       resolve: {
-        Order: $scope.order
+        Order: $scope.order,
+        Purchase : $scope.purchase
       }
     });
   };
@@ -250,7 +251,7 @@ app.factory('OrdersAPI', ['$resource', 'config', function ($resource, config) {
 ]);
 
 
-app.controller("ModalOrderAdjustmentCtrl", function($scope, $uibModalInstance, OrdersAPI, Order){
+app.controller("ModalOrderAdjustmentCtrl", function($scope, $uibModalInstance, OrdersAPI, Order, Purchase){
 
 
   $scope.Adjustment = {};
@@ -275,5 +276,11 @@ app.controller("ModalOrderAdjustmentCtrl", function($scope, $uibModalInstance, O
     $uibModalInstance.close();
   }
   
+  $scope.calculateChange = function(credit){
+    if (credit > Purchase.total) {
+      $scope.Adjustment.change = credit - Purchase.total;
+    }
+  }
+
 
 });
